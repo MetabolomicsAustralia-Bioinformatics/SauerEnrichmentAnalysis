@@ -15,14 +15,21 @@ python proc.py
 ```
 
 **Note the following points:**
-1. The number of possible enrichment sites for an analyte defined in file 1 **must** match the number of isotope data series' provided in file 2.
+1. The number of possible enrichment sites for an analyte defined in file 1 **must** match the number of isotope data series' provided in file 2. Note that the M0 isotope is not included in this number.
+   - For example, if M0, M+1 and M+2 are defined for a molecule, the number of enrichment sites specified in file 1 must be 2.
 2. The names of metabolites defined in file 1 must exactly match those in file 2.
 3. In file 2, the headers for the isotope data series must be given exactly as follows:
 ~~~
-deoxyribose M0 Results, deoxyribose M+1 Results,	deoxyribose M+2 Results etc...
+deoxyribose M0 Results, deoxyribose M+1 Results, deoxyribose M+2 Results etc...
 ~~~
    Where 'M9' represents the monoisotopic peak, 'M+1' is the first isotope peak, 'M+2' is the second isotope peak and so on. The current script is very sensitive to the formatting of these headers so be sure to adapt the example files carefully.
 4. When specifying chemical formulae in file 1:
    - Place spaces between entries for different elements. Eg. C6 H12 O6 rather than C6H12O6.
    - If there is only one atom of a given element, it must be entered as X1. Eg. C2 O2 H5 N1 rather than C2 O2 H5 N.
    - An internal atom type dictionary seems to go looking for Si atoms. The script crashes if Si0 is not added for a compound with no silicione. Fix this in a future update.
+5. No cells in the file 2 input can be blank. Must replace with 0.
+
+### To-do
+1. Add command-line areument parsing
+2. Try to increase flexibility of input file type definitions
+3. Sort out bug for Si0 compound formulae definitions
