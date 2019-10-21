@@ -5,7 +5,6 @@ try:
 except:
     print('better exceptions import failed')
 
-
 """
 class Labelling(object):
     def __init__(self, species, label_dict):
@@ -28,7 +27,6 @@ fp = open('sample_files/out_v2.csv', 'w')
 #print atomic_composition
 
 labelling_list = []
-
 max_results_length = 0
 
 for record in records:

@@ -19,7 +19,6 @@ def read_csv(infile):
                          information
     @type record_list: listType of Class.Record
     """
-
     record_list = []
     isotope_list = []
     with open(infile, "r") as fp:
@@ -87,6 +86,7 @@ def read_csv(infile):
 
     return record_list
 
+
 def read_mhunter_csv(infile, verbose=False):
     """
     Reads an input file with isotopic labelling information coming
@@ -105,22 +105,23 @@ def read_mhunter_csv(infile, verbose=False):
     fp = open(infile, 'r')
     lines = fp.readlines()
     
-    for i,word in enumerate(lines[0].split(',')):
-        if ' M' in word:
-            parts = word.split(' M')
-            species_name = parts[0]
-            
-            test = False
-            for record in record_list:
-                if record.name == species_name:
-                    test = True
-                    record.add_record_position(i)
-                else:
-                    pass
-            if test == False: # if we haven't seen this before
-                record = Record(species_name)
+    # use regex to parse out the species name
+    pattern = r"M\+?\d{1,2} Results"
+    for i, word in enumerate(lines[0].split(',')):
+        m_pattern = re.findall(pattern, colname)[0]
+        species_name = word.replace(" " + m_pattern, "")
+        
+        test = False
+        for record in record_list:
+            if record.name == species_name:
+                test = True
                 record.add_record_position(i)
-                record_list.append(record)
+            else:
+                pass
+        if test == False: # if we haven't seen this before
+            record = Record(species_name)
+            record.add_record_position(i)
+            record_list.append(record)
                 
     name_position = -1
 
@@ -172,9 +173,8 @@ def read_atomic_composition(infile):
                     species
     @type N_dict: dictType
     """
-    fp = open(infile, 'r')
-
-    lines = fp.readlines()
+    with open(infile, "r") as fp:
+        lines = fp.readlines()
 
     atomic_composition = {}
     N_dict = {}
@@ -194,18 +194,16 @@ def read_atomic_composition(infile):
     for key in N_dict.keys():
         name = re.sub(r'\W+', '', key)
         
-
     for key in atomic_composition.keys():
         name = re.sub(r'\W+', '', key)
         
-
     return atomic_composition, N_dict
             
 
 def calculate_labelling(record, N_dict, atomic_dict):
     """
     @summary: calculates percentage labelling based on the method of
-              sauer et at
+              Sauer et at
 
     @param record: a class containing a species name, and m0 to mn values
                    of isotopic contribution
@@ -224,11 +222,10 @@ def calculate_labelling(record, N_dict, atomic_dict):
     """
     
     name = record.get_name()
-    
     species_dict = atomic_dict[name]
     #print species_dict
 
-    N = N_dict[name] +1
+    N = N_dict[name] + 1
     print(name, N)
     
     convolved_matrix = full_correction_matrix(species_dict, N, cauchy=True)
