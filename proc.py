@@ -5,7 +5,7 @@ try:
 except:
     print('better exceptions import failed')
 
-"""
+
 class Labelling(object):
     def __init__(self, species, label_dict):
         self.species = species
@@ -18,7 +18,7 @@ class Labelling(object):
     def get_label_dict(self):
 
         return self.label_dict
-"""
+
 
 records = read_mhunter_csv('sample_files/sample_input_data.csv')
 atomic_composition, N_dict = read_atomic_composition('sample_files/sample_input_formulae.csv')

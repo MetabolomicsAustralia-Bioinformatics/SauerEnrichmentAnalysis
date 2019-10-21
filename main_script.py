@@ -102,26 +102,27 @@ def read_mhunter_csv(infile, verbose=False):
     """
     record_list = []
     isotope_list = []
-    fp = open(infile, 'r')
-    lines = fp.readlines()
+    with open(infile, "r") as fp:
+        lines = fp.readlines()
     
     # use regex to parse out the species name
     pattern = r"M\+?\d{1,2} Results"
-    for i, word in enumerate(lines[0].split(',')):
-        m_pattern = re.findall(pattern, colname)[0]
-        species_name = word.replace(" " + m_pattern, "")
-        
-        test = False
-        for record in record_list:
-            if record.name == species_name:
-                test = True
+    for i, word in enumerate(lines[0].replace("\n", "").split(',')):
+        m_pattern = re.findall(pattern, word)
+        if len(m_pattern) > 0:
+            species_name = word.replace(" " + m_pattern[0], "")
+            
+            test = False
+            for record in record_list:
+                if record.name == species_name:
+                    test = True
+                    record.add_record_position(i)
+                else:
+                    pass
+            if test == False: # if we haven't seen this before
+                record = Record(species_name)
                 record.add_record_position(i)
-            else:
-                pass
-        if test == False: # if we haven't seen this before
-            record = Record(species_name)
-            record.add_record_position(i)
-            record_list.append(record)
+                record_list.append(record)
                 
     name_position = -1
 
