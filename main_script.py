@@ -1,8 +1,6 @@
 """
 functions for implementation of Sauer isotope labeling calculation
-
 """
-
 
 import re
 import numpy as np
@@ -24,20 +22,15 @@ def read_csv(infile):
 
     record_list = []
     isotope_list = []
-    fp = open(infile, 'r')
-
-    lines = fp.readlines()
-
-
+    with open(infile, "r") as fp:
+        lines = fp.readlines()
 
     for line in lines:
         words = line.split(',')
-
         # if it is the line containing species name
         # the first part is empty, second contains
         # species name
         if words[0] == '' and words[1] != "":
-
             try:
                 #print len(record_list)
                 record.set_rt(rt)
@@ -85,7 +78,6 @@ def read_csv(infile):
             record.add_background_list(sample_name, isotope_list)
             isotope_list = []
 
-        
         else:
             pass #do nothing, skip blank line or title line
 
@@ -93,42 +85,35 @@ def read_csv(infile):
     record.set_rt(rt)
     record_list.append(record)
 
-        
-
     return record_list
 
-def read_mhunter_csv(infile):
+def read_mhunter_csv(infile, verbose=False):
     """
-    @summary: reads an input file with isotopic labelling information coming
-              directly from Agilent Mass Hunter software
+    Reads an input file with isotopic labelling information coming
+    directly from Agilent Mass Hunter software
 
-    @param infile: The name of the input file
-    @type infile: strType
+    PARAMS
+    ------
+    infile: str; The name of the input file
 
-    @return record_list: A list of records containing isotopic labelling
-                         information
-    @type record_list: listType of Class.Record
+    RETURNS
+    -------
+    record_list: A list of Class.Record containing isotopic labelling information
     """
-
     record_list = []
     isotope_list = []
     fp = open(infile, 'r')
-
     lines = fp.readlines()
     
-    #print lines[0]
-
     for i,word in enumerate(lines[0].split(',')):
         if ' M' in word:
             parts = word.split(' M')
             species_name = parts[0]
             
-            
             test = False
             for record in record_list:
                 if record.name == species_name:
                     test = True
-                    #print "test is true"
                     record.add_record_position(i)
                 else:
                     pass
@@ -143,7 +128,6 @@ def read_mhunter_csv(infile):
         if word == "Name":
             name_position = i
 
-
     for line in lines[2:]:
         #print line
         words = line.split(',')
@@ -157,12 +141,13 @@ def read_mhunter_csv(infile):
             positions = record.get_record_positions()
             isotope_list = []
             for position in positions:
-                print record.name, " : ", position, " : ", words[position]
+                if verbose:
+                    print(record.name, " : ", position, " : ", words[position])
                 if words[position] != "":
                     try:
                         isotope_list.append(float(words[position]))
                     except(ValueError):
-                        print "Could not convert", words[position]
+                        print("Could not convert", words[position])
                 else:
                     isotope_list.append(0.0)
 
@@ -186,7 +171,6 @@ def read_atomic_composition(infile):
     @return N_dict: A dictionary of the number of labelled carbons for each
                     species
     @type N_dict: dictType
-
     """
     fp = open(infile, 'r')
 
@@ -218,7 +202,6 @@ def read_atomic_composition(infile):
     return atomic_composition, N_dict
             
 
-            
 def calculate_labelling(record, N_dict, atomic_dict):
     """
     @summary: calculates percentage labelling based on the method of
@@ -241,24 +224,22 @@ def calculate_labelling(record, N_dict, atomic_dict):
     """
     
     name = record.get_name()
-    #name = re.sub(r'\W+', '', name)
     
     species_dict = atomic_dict[name]
     #print species_dict
-  
 
     N = N_dict[name] +1
-    print name, N
+    print(name, N)
     
     convolved_matrix = full_correction_matrix(species_dict, N, cauchy=True)
-    print convolved_matrix
+    print(convolved_matrix)
     inverse = convolved_matrix.I
     #print inverse
     results_dict = {}
 
     #now find ms_matrix
     correction_dict = record.get_background_list()
-    for key, value in correction_dict.iteritems():
+    for key, value in correction_dict.items():
         #print value
         #for val in value:
             #print float(val)/float(sum(value))
@@ -273,11 +254,11 @@ def calculate_labelling(record, N_dict, atomic_dict):
             mdva = inverse*ms_matrix/(sum(inverse*ms_matrix))[0,0]
             labelling = fractional_labelling(mdva)
         except(ValueError):
-            print "Error in record", name
-            print "<br />"
-            print "size inverse: " ,inverse.shape[0], inverse.shape[1]
-            print "size ms_matrix: ",ms_matrix.shape[0], ms_matrix.shape[1]
-            print "<br /> "
+            print("Error in record", name)
+            print("<br />")
+            print("size inverse: " ,inverse.shape[0], inverse.shape[1])
+            print("size ms_matrix: ",ms_matrix.shape[0], ms_matrix.shape[1])
+            print("<br /> ")
         #print "background\n"
         #print  mdva
         #print "\n"
@@ -297,7 +278,7 @@ def calculate_labelling(record, N_dict, atomic_dict):
     #temporary counter
     i = 0
 
-    for key, value in working_dict.iteritems():
+    for key, value in working_dict.items():
         #print value
         #for val in value:
             #print float(val)/float(sum(value))

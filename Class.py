@@ -1,6 +1,5 @@
 class Record(object):
     """
-
     """
 
     def __init__(self, name):
@@ -9,18 +8,12 @@ class Record(object):
 
         @param name: The name of the molecular species (e.g. GABA etc)
         @type name: strType
-
-        @param rt: the retention time where the molecular species is found
-        @type rt: floatType
-
         """
-
         self.name = name
         if '\"' in name:
             name = name.strip('\"')
         elif "\'" in name:
             name = name.strip("\'")
-     
         
         # following is used to store actual data
         self.label_isotope_dict = {}
@@ -40,9 +33,7 @@ class Record(object):
         @param isotope_list: a list of intensity of each isotope of the
                              species recorded, starting from m0
         @type isotope_list: listType
-
         """
-        
 
         self.label_isotope_dict[label] = isotope_list
         
@@ -52,14 +43,14 @@ class Record(object):
 
         self.position_list.append(position)
 
-    def get_record_positions(self):
 
+    def get_record_positions(self):
         return self.position_list
 
 
     def get_label_isotope_dict(self):
-
         return self.label_isotope_dict
+
 
     def add_background_list(self, label, isotope_list):
         """
@@ -72,16 +63,13 @@ class Record(object):
         @param isotope_list: a list of intensity of each isotope of the
                              species recorded, starting from m0
         @type isotope_list: listType
-
         """
-        
-
         self.background_dict[label] = isotope_list    
 
 
     def get_background_list(self):
-
         return self.background_dict
+
 
     def set_rt(self, rt):
         """
@@ -89,28 +77,26 @@ class Record(object):
         
         @param rt: the retention time where the molecular species is found
         @type rt: floatType
-
         """
-
         self.rt = rt
 
-    def get_rt(self, rt):
 
+    def get_rt(self, rt):
         try:
             return self.rt()
         except:
-            print "Error: rt not set"
+            print("Error: rt not set")
             return 0
+
 
     def get_name(self):
         return self.name
 
+
     def background_correct(self):
         """
         @summary: does background correction
-
         """
-
         full_bg = []
         
         if len(self.background_dict) > 0:
@@ -135,26 +121,18 @@ class Record(object):
                 for i,value in enumerate(is_list):
                     value = value - full_bg[i]
 
-            print "background correction done"
+            print("background correction done")
         else:
-            print "no background results recorded"
-            
-    
-    
-        
+            print("no background results recorded")
 
         
 class Labelling(object):
-
     def __init__(self, species, label_dict):
-
         self.species = species
         self.label_dict = label_dict
 
     def get_species(self):
-
         return self.species
 
     def get_label_dict(self):
-
         return self.label_dict

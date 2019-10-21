@@ -1,8 +1,3 @@
-"""
-
-functions necessary to perform the sawa isotope correction stuff
-
-"""
 import math
 import numpy as np
 
@@ -29,11 +24,11 @@ isotopic_mass_vectors = {'C':[0.98918, 0.01082], 'H':[0.999844, 0.000116], \
                          'N':[0.99634, 0.00366], 'O':[0.99758, 0.00038, \
                          0.00204], 'Si':[0.922297, 0.046832, 0.030872]}
 
-def full_correction_matrix(species_dict,  N, cauchy=True):
+def full_correction_matrix(species_dict, N, cauchy=True):
     """
     @summary: 
     """
-    print "Caution: using modified natural abundance figures"
+    print("Caution: using modified natural abundance figures")
     species_list = ['C', 'O', 'N', 'H', 'Si']
     #species_list = species_dict.keys()
     matrix_list = []
@@ -53,7 +48,6 @@ def full_correction_matrix(species_dict,  N, cauchy=True):
             matrix_list.append(np.matrix(matrix))
 
     result = matrix_list[0]
-    
 
     for matrix in matrix_list[1:]:
         result = result*matrix
@@ -65,7 +59,6 @@ def correction_matrix_cauchy(N, species, n):
     # terms along the first column of the correction
     # are equivalent to the cauchy product of the
     # isotopic mass vectors
-    
 
     initial = isotopic_mass_vectors[species]
     final = initial
@@ -92,8 +85,9 @@ def correction_matrix_cauchy(N, species, n):
                     matrix[i,j] = 0.0
 
     
-    print species,  matrix
+    print(species,  matrix)
     return matrix
+
 
 def correction_matrix_species(species, n,  N):
 
@@ -125,50 +119,38 @@ def correction_matrix_species(species, n,  N):
                         matrix[i,j] = correction_matrix_element(0,n-1,1,species)
                     elif abs(i-j) >3:
                         matrix[i,j] = 0.0
-                        
-                         
-                                                                     
-                                         
 
     return matrix
-                
-
-
-
 
 
 def correction_matrix_element(m0, m1, m2, S):
-
     """
     m0 is the number of non-isotope atoms of this species in the fragment
     m1 is the number of isotope atoms with m1 in the fragment
     m2 is the number of isotope atoms with m2 in the fragment
     S is the species "C", "O", "H", "Si", "S"
-    
     """
-
-    sum_term = factorial(m0 + m1 + m2)
-
+    sum_term = np.math.factorial(m0 + m1 + m2)
     
     if S in ['H', 'C', 'N', 'Si', 'O']:  # These have only m0 and m1
         
         if m0 > 0:
             numer_1 = math.pow(dict_of_mass_abun[S+'_m0'], float(m0))
-            denom_1 = factorial(m0)
+            denom_1 = np.math.factorial(m0)
         else:
             numer_1 = 1
             denom_1 = 1
 
         if m1 > 0:
             numer_2 = math.pow(dict_of_mass_abun[S+'_m1'], float(m1))
-            denom_2 = factorial(m1)
+            denom_2 = np.math.factorial(m1)
         else:
             numer_2 = 1
             denom_2 = 1
 
         if S in ['O', 'Si'] and m2 > 0:
             numer_3 = math.pow(dict_of_mass_abun[S+'_m2'], float(m2))
-            denom_3 = factorial(m2)
+            denom_3 = np.math.factorial(m2)
         else:
             numer_3 = 1
             denom_3 = 1
@@ -180,49 +162,28 @@ def correction_matrix_element(m0, m1, m2, S):
 
     
         return sum_term*term1*term2*term3
-        
-    
 
-        
     else:
-        print "error"
+        print("error")
         return 0
-    
-
-
-def factorial(n):
-
-    fact = 1
-
-    for i in range(1, n+1):
-
-        fact = fact*i
-
-    return fact
-        
 
 
 def correct_unlabelled(mdva, mdvun, f_unlabelled):
-
     numer = mdva - f_unlabelled*mdvun
     denom = 1 - f_unlabelled
 
     return numer/denom
 
-def fractional_labelling(mdvaa):
 
+def fractional_labelling(mdvaa):
     numer = 0.0
     denom = 0.0
 
     for i, elem in enumerate(mdvaa):
         numer = numer + i*elem
-        
         denom = denom + (len(mdvaa)-1)*elem
 
-    
     return numer/denom
-    
-
 
 
 if __name__ == "__main__":
@@ -231,7 +192,7 @@ if __name__ == "__main__":
     
     my_matrix = full_correction_matrix(species_dict, N, cauchy=True)
     
-    print my_matrix
+    print(my_matrix)
 
     # this is the m0, m1 etc values of the fragment as measured
     ms_matrix = np.matrix(([0.6228],[0.1517], [0.0749], [0.1507]))
@@ -248,11 +209,11 @@ if __name__ == "__main__":
     labelling = fractional_labelling(mdvaa)
     labelling_unc = fractional_labelling(mdva)
 
-    print 'mdva:'
-    print mdva
-    print ''
-    print 'mdvaa'
-    print mdvaa
-    print ''
-    print 'Labelling: %1.2f' %labelling[0,0]
-    print 'Labelling uncorrected: %1.2f' %labelling_unc[0,0]
+    print('mdva:')
+    print(mdva)
+    print('')
+    print('mdvaa')
+    print(mdvaa)
+    print('')
+    print('Labelling: %1.2f' %labelling[0,0])
+    print('Labelling uncorrected: %1.2f' %labelling_unc[0,0])
