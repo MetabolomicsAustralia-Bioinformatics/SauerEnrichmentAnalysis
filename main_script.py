@@ -6,85 +6,7 @@ import re
 import numpy as np
 from Function import full_correction_matrix, fractional_labelling
 
-from Class import Record
-
-def read_csv(infile):
-    """
-    @summary: reads an input file with isotopic labelling information
-
-    @param infile: The name of the input file
-    @type infile: strType
-
-    @return record_list: A list of records containing isotopic labelling
-                         information
-    @type record_list: listType of Class.Record
-    """
-    record_list = []
-    isotope_list = []
-    with open(infile, "r") as fp:
-        lines = fp.readlines()
-
-    for line in lines:
-        words = line.split(',')
-        # if it is the line containing species name
-        # the first part is empty, second contains
-        # species name
-        if words[0] == '' and words[1] != "":
-            try:
-                #print len(record_list)
-                record.set_rt(rt)
-                record_list.append(record)
-            except:
-                pass # no record has been created yet
-            # start a new Record
-            species = words[1]
-            #print species
-            record = Record(species)
-            
-        # If it is a labelled record the first part is
-        # the sample name, second is labelling source
-        elif words[0] != '' and words[1] != '':
-            sample_name = words[0] + ',' + words[1]
-            
-            labelling_species = words[1]
-            rt = words[2]
-
-            for word in words[3:]:
-                try:
-                    #print  word,
-                    isotope_list.append(int(word))
-                except:
-                    pass
-            #print sample_name, isotope_list
-            record.add_label_isotope_list(sample_name, isotope_list)
-            isotope_list = []
-
-        # if it is a background record, the name is the first part
-        # and the second part is blank (no labelling source)
-        elif words[0] != '' and words[1] == '':
-            #print "Doing background"
-            sample_name = words[0]
-            labelling_species = words[1]
-            rt = words[2]
-
-            for word in words[3:]:
-                try:
-                    #print  word,
-                    isotope_list.append(int(word))
-                except:
-                    pass
-            #print sample_name, isotope_list
-            record.add_background_list(sample_name, isotope_list)
-            isotope_list = []
-
-        else:
-            pass #do nothing, skip blank line or title line
-
-    # write the final record
-    record.set_rt(rt)
-    record_list.append(record)
-
-    return record_list
+from Class import Record, Labelling
 
 
 def read_mhunter_csv(infile, verbose=False):
@@ -201,25 +123,21 @@ def read_atomic_composition(infile):
     return atomic_composition, N_dict
             
 
-def calculate_labelling(record, N_dict, atomic_dict):
+def calculate_labelling(record, N_dict, atomic_dict, verbose=False):
     """
-    @summary: calculates percentage labelling based on the method of
-              Sauer et at
+    Calculates percentage labelling based on the method of Sauer et al.
 
-    @param record: a class containing a species name, and m0 to mn values
-                   of isotopic contribution
-    @type record: isotope_sawa.Class.Record
+    PARAMS
+    ------
+    record: a class containing a species name, and m0 to mn values of isotopic contribution. 
+    Class.Record
+    N_dict:A dictionary of the number of labelled carbons for each species (which is the rank of the mdva matrix), where each key is a sample. 
+    atomic_dict: A dictionary with the atomic composition of each species
+    verbose: bool; verbosity parameter
 
-    @param N_dict:A dictionary of the number of labelled carbons for each
-                    species ( which is the rank of the mdva matrix)
-    @type N_dict: dictType
-
-    @param atomic_dict: A dictionary with the atomic composition
-                                of each species
-    @type atomic_dict: dictType
-
-    @return results_dict: a dictionary of sample name: labelling % pairs
-    @type results_dict: dictType
+    RETURNS
+    -------
+    results_dict: a dictionary of sample name: labelling % pairs
     """
     
     name = record.get_name()
@@ -227,10 +145,12 @@ def calculate_labelling(record, N_dict, atomic_dict):
     #print species_dict
 
     N = N_dict[name] + 1
-    print(name, N)
+    if verbose:
+        print(name, N)
     
     convolved_matrix = full_correction_matrix(species_dict, N, cauchy=True)
-    print(convolved_matrix)
+    if verbose:
+        print(convolved_matrix)
     inverse = convolved_matrix.I
     #print inverse
     results_dict = {}

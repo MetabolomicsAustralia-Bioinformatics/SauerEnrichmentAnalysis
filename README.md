@@ -1,7 +1,9 @@
 # SauerEnrichmentAnalysis
 
+* Python implementation of metabolic flux ratios. Python implementation originally written by Sean O'Callaghan, a previous bioinformatician at MA, an unknown number of years ago, then maintained by Michael Leeming (bioinformatician at Vic Node MA from 2017 - 2018).
+* Considered to be superceded by [`SUMOFLUX`](https://imsb.ethz.ch/research/zamboni/resources.html#par_textimage_38875268), a Matlab package, recommended instead by ETH Zurich. 
 * This is a refactor of the original Sauer enrichment analysis tool, migrated to Python3.
-* Implementation of the metabolic flux analysis procedures described by Sauer and co-workers (https://www.ncbi.nlm.nih.gov/pubmed/17035687).
+* Implementation of the metabolic flux analysis procedures described by Annik Nanchen et. al. (https://www.ncbi.nlm.nih.gov/pubmed/17035687).
 
 ## Usage
 Two different input files are required.
@@ -33,8 +35,12 @@ deoxyribose M0 Results, deoxyribose M+1 Results, deoxyribose M+2 Results etc...
 5. No cells in the file 2 input can be blank. Must replace with 0.
 
 ### To-do
+
 1. Add command-line arg parsing
 2. Try to increase flexibility of input file type definitions
-  * change reading logic to regex, instead of looking for ` M`.
 3. Sort out bug for Si0 compound formulae definitions (pt. 4 above)
 4. Add Python Dash front end?
+
+### Dev Notes
+
+* In test runs with the `py3` version, the output generally has more decimal places (0 to 5 more) than the `py2` version, so the outputs will differ during testing by error on the order of 10E11 or smaller.

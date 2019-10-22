@@ -1,30 +1,18 @@
 from main_script import read_mhunter_csv, calculate_labelling, read_atomic_composition
 
+from Class import Record, Labelling
+
 try:
     import better_exceptions
 except:
     print('better exceptions import failed')
 
 
-class Labelling(object):
-    def __init__(self, species, label_dict):
-        self.species = species
-        self.label_dict = label_dict
-
-    def get_species(self):
-
-        return self.species
-
-    def get_label_dict(self):
-
-        return self.label_dict
-
-
+# Read all the relevant files
 records = read_mhunter_csv('sample_files/sample_input_data.csv')
 atomic_composition, N_dict = read_atomic_composition('sample_files/sample_input_formulae.csv')
 fp = open('sample_files/out_v2.csv', 'w')
 
-#print atomic_composition
 
 labelling_list = []
 max_results_length = 0

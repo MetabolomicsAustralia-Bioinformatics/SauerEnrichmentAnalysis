@@ -25,34 +25,40 @@ isotopic_mass_vectors = {'C':[0.98918, 0.01082], 'H':[0.999844, 0.000116], \
                          0.00204], 'Si':[0.922297, 0.046832, 0.030872]}
 
 def full_correction_matrix(species_dict, N, cauchy=True):
+    """Implementation of Annika et. al., equation 3. Wrapper function to: 
+    1. call correction_matrix_cauchy() or correction_matrix_species() depending on user input.
+    Cauchy by default. 
+    2. Multiplies the C, O, N, H, and Si matricies (left to right), in that order. 
+
+    PARAMS
+    ------
+    species_dict: dictionary of 
+    N: ??unknown??
+    cauchy: bool; specifies whether or not to use correction_matrix_cauchy() (True) or correction_matrix_species() (False)
+
+    RETURNS
+    -------
+    result: matrix product of all species matricies. 
     """
-    @summary: 
-    """
-    print("Caution: using modified natural abundance figures")
+    #print("Caution: using modified natural abundance figures")
     species_list = ['C', 'O', 'N', 'H', 'Si']
-    #species_list = species_dict.keys()
     matrix_list = []
-    actual_matrices = []
 
     for species in species_list:
-        
         if species_dict[species] > 0:
-            if cauchy==True:
+            if cauchy:
                 matrix = correction_matrix_cauchy(N, species, species_dict[species])
-            
             else:
                 matrix = correction_matrix_species(species, species_dict[species], N)
-            #print species
-            #print matrix
-            #print ' '
             matrix_list.append(np.matrix(matrix))
 
+    # Repeated matrix multiplication
     result = matrix_list[0]
-
     for matrix in matrix_list[1:]:
         result = result*matrix
 
     return result
+
 
 def correction_matrix_cauchy(N, species, n):
     # It can be shown (Milica Thesis), that the
@@ -84,8 +90,7 @@ def correction_matrix_cauchy(N, species, n):
                 except:
                     matrix[i,j] = 0.0
 
-    
-    print(species,  matrix)
+    #print(species,  matrix)
     return matrix
 
 
@@ -169,6 +174,8 @@ def correction_matrix_element(m0, m1, m2, S):
 
 
 def correct_unlabelled(mdva, mdvun, f_unlabelled):
+    """Implementation of Nanchen et. al., equation (5). 
+    """
     numer = mdva - f_unlabelled*mdvun
     denom = 1 - f_unlabelled
 
