@@ -15,6 +15,7 @@ class Record(object):
         elif "\'" in name:
             name = name.strip("\'")
         
+        # init attributes (dictionaries)
         # following is used to store actual data
         self.label_isotope_dict = {}
         self.background_dict = {}
@@ -36,7 +37,8 @@ class Record(object):
         """
 
         self.label_isotope_dict[label] = isotope_list
-        
+
+
     def add_record_position(self, position):
         """ tells the read_mhunter_csv script which
             postions the species was found in"""
@@ -125,7 +127,7 @@ class Record(object):
         else:
             print("no background results recorded")
 
-        
+
 class Labelling(object):
     def __init__(self, species, label_dict):
         self.species = species

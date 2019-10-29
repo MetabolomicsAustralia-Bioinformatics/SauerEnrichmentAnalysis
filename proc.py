@@ -1,11 +1,7 @@
-from main_script import read_mhunter_csv, calculate_labelling, read_atomic_composition
+#from main_script import read_mhunter_csv, calculate_labelling, read_atomic_composition
+from Function import *
 
 from Class import Record, Labelling
-
-try:
-    import better_exceptions
-except:
-    print('better exceptions import failed')
 
 
 # Read all the relevant files

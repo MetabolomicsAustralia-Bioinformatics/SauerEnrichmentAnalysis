@@ -1,7 +1,7 @@
 # SauerEnrichmentAnalysis
 
 * Python implementation of metabolic flux ratios. Python implementation originally written by Sean O'Callaghan, a previous bioinformatician at MA, an unknown number of years ago, then maintained by Michael Leeming (bioinformatician at Vic Node MA from 2017 - 2018).
-* Considered to be superceded by [`SUMOFLUX`](https://imsb.ethz.ch/research/zamboni/resources.html#par_textimage_38875268), a Matlab package, recommended instead by ETH Zurich. 
+* Considered to be superceded by [`SUMOFLUX`](https://imsb.ethz.ch/research/zamboni/resources.html#par_textimage_38875268), a Matlab package, recommended instead by ETH Zurich.
 * This is a refactor of the original Sauer enrichment analysis tool, migrated to Python3.
 * Implementation of the metabolic flux analysis procedures described by Annik Nanchen et. al. (https://www.ncbi.nlm.nih.gov/pubmed/17035687).
 
@@ -27,7 +27,8 @@ python3 proc.py
 deoxyribose M0 Results, deoxyribose M+1 Results, deoxyribose M+2 Results etc...
 ```
 
-   Where 'M0' represents the monoisotopic peak, 'M+1' is the first isotope peak, 'M+2' is the second isotope peak and so on. The current script is very sensitive to the formatting of these headers so be sure to change the example files carefully.
+   Where 'M0' represents the monoisotopic peak, 'M+1' is the first isotope peak, 'M+2' is the second isotope peak and so on. The current script is very sensitive to the formatting of these headers, so be sure to change the example files carefully.
+
 4. When specifying chemical formulae in file 1:
    - Place spaces between entries for different elements. Eg. C6 H12 O6 rather than C6H12O6.
    - If there is only one atom of a given element X, it must be entered as X1. Eg. C2 O2 H5 N1 rather than C2 O2 H5 N.
