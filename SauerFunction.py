@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import re
 
-from Class import Record
+from SauerClass import Record
 
 # From Sauer Book Chapter
 # dict_of_mass_abun = { 'C_m0':0.9893, 'C_m1':0.0107, 'H_m0':0.999885, \
@@ -210,7 +210,7 @@ def read_mhunter_csv(infile, verbose=False):
 
     RETURNS
     -------
-    record_list: A list of Class.Record containing isotopic labelling information
+    record_list: A list of SauerClass.Record containing isotopic labelling information
     """
     record_list = []
     isotope_list = []
@@ -319,7 +319,7 @@ def calculate_labelling(record, N_dict, atomic_dict, verbose=False):
     PARAMS
     ------
     record: a class containing a species name, and m0 to mn values of isotopic contribution. 
-    Class.Record
+    SauerClass.Record
     N_dict:A dictionary of the number of labelled carbons for each species (which is the rank of the mdva matrix), where each key is a sample. 
     atomic_dict: A dictionary with the atomic composition of each species
     verbose: bool; verbosity parameter
