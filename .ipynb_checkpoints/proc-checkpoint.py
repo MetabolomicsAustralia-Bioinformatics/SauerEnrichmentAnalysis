@@ -7,7 +7,7 @@ from SauerClass import Record, Labelling
 # Read all the relevant files
 records = read_mhunter_csv('sample_files/sample_input_data.csv')
 atomic_composition, N_dict = read_atomic_composition('sample_files/sample_input_formulae.csv')
-fp = open('sample_files/out_v2.csv', 'w')
+fp = open('sample_files/out_temp.csv', 'w')
 
 
 labelling_list = []
