@@ -1,0 +1,35 @@
+<tool id="sauer_enrichment" name="Calculate metabolic flux ratios" version="0.1.0" python_template_version="3.5">
+    <requirements>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
+    ]]></command>
+    <inputs>
+      <param type="data" name="input_data" format="csv" />
+      <param type="data" name="input_formulae" format="csv" />
+    </inputs>
+    <outputs>
+      <data name="output_data" format="csv" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input_data" value="sample_files/sample_input_data.csv"/>
+          <param name="input_formulae" value="sample_files/sample_input_formulae.csv"/>
+          <output name="output_data" value="sample_files/sample_out.csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{githubSauerEnrichmentAnalysis,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {SauerEnrichmentAnalysis},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/MetabolomicsAustralia-Bioinformatics/SauerEnrichmentAnalysis},
+}</citation>
+    </citations>
+</tool>
