@@ -1,19 +1,32 @@
 #from main_script import read_mhunter_csv, calculate_labelling, read_atomic_composition
-from SauerFunction import *
+import SauerFunction as sf
 from SauerClass import Record, Labelling
+import argparse
+
 
 
 # Read all the relevant files
-records = read_mhunter_csv('sample_files/sample_input_data.csv')
-atomic_composition, N_dict = read_atomic_composition('sample_files/sample_input_formulae.csv')
-fp = open('sample_files/out_temp.csv', 'w')
+#records = sf.read_mhunter_csv('sample_files/sample_input_data.csv')
+#atomic_composition, N_dict = sf.read_atomic_composition('sample_files/sample_input_formulae.csv')
+#fp = open('sample_files/out_temp.csv', 'w')
+
+
+parser = argparse.ArgumentParser(description='Do enrichment analysis.')
+parser.add_argument('-1','--input_data', help='Input data file name', required=True)
+parser.add_argument('-2','--input_formulae', help='Input formulae file name', required=True)
+parser.add_argument('-o','--output_filename', help='Name of output file', required=True)
+args = vars(parser.parse_args())
+
+records = sf.read_mhunter_csv(args["input_data"])
+atomic_composition, N_dict = sf.read_atomic_composition(args["input_formulae"])
+fp = open(args["output_filename"], 'w')
 
 
 labelling_list = []
 max_results_length = 0
 
 for record in records:
-    results_dict = calculate_labelling(record, N_dict, atomic_composition)
+    results_dict = sf.calculate_labelling(record, N_dict, atomic_composition)
     for key, value in results_dict.items():
         if len(value) > max_results_length:
             max_results_length = len(value)
@@ -43,4 +56,5 @@ for label in labelling_list:
                 for val in value:
                     fp.write(str(val) + ', ')
                 fp.write('\n')
-print("Written out results.")
+print("Process complete; wrote out results.")
+

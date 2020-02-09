@@ -254,13 +254,14 @@ def read_mhunter_csv(infile, verbose=False):
             positions = record.get_record_positions()
             isotope_list = []
             for position in positions:
-                #if verbose:
-                    #print(record.name, " : ", position, " : ", words[position])
+                # if blank cell, write 0.0
+                # fiddly because float() returns 0.0, but float("") returns an error.
                 if words[position] != "":
                     try:
                         isotope_list.append(float(words[position]))
                     except(ValueError):
-                        print("Could not convert", words[position])
+                        if verbose:
+                            print("Could not convert empty string (cell). Appending 0.0 instead.")
                 else:
                     isotope_list.append(0.0)
 
