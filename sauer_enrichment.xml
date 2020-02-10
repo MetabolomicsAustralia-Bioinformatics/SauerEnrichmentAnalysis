@@ -33,6 +33,7 @@
 
           python3 proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
 
+        Outputs as csv.
     ]]></help>
     <citations>
         <citation type="bibtex">
