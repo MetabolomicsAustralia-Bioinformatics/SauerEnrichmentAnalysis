@@ -5,8 +5,8 @@
         python3 /home/dteng/Documents/SauerEnrichmentAnalysis/proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
     ]]></command>
     <inputs>
-      <param type="data" name="input_data" format="csv" />
-      <param type="data" name="input_formulae" format="csv" />
+      <param type="data" name="input_data" label="Input data" format="csv" />
+      <param type="data" name="input_formulae" label="Input formulae" format="csv" />
     </inputs>
     <outputs>
       <data name="output_data" format="csv" />
@@ -15,11 +15,24 @@
         <test>
           <param name="input_data" value="sample_files/sample_input_data.csv"/>
           <param name="input_formulae" value="sample_files/sample_input_formulae.csv"/>
+
           <output name="output_data" value="sample_files/sample_out.csv"/>
         </test>
     </tests>
     <help><![CDATA[
-        TODO: Fill in help.
+        Do enrichment analysis to calculate metabolic flux ratios. Python2 implementation originally written by Sean O'Callaghan. Implementation of the metabolic flux analysis procedures described by Annik Nanchen et. al. (https://www.ncbi.nlm.nih.gov/pubmed/17035687).
+
+        Inputs:
+
+        1. input_data: A csv file providing the intensities for each isotopic peak for each analyte defined in file 1 in each sample.
+        2. input_formulae: A csv file defining the name and chemical formula of the analyte molecule(s) as well as the number of atoms that can possibly be exchanged.
+
+        Command:
+
+        ::
+
+          python3 proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
+
     ]]></help>
     <citations>
         <citation type="bibtex">
