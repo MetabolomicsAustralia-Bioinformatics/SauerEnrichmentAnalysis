@@ -2,7 +2,7 @@
     <requirements>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
+        python3 /home/dteng/Documents/SauerEnrichmentAnalysis/proc.py -1 '$input_data' -2 '$input_formulae' -o '$output_data'
     ]]></command>
     <inputs>
       <param type="data" name="input_data" format="csv" />
