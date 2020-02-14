@@ -1,25 +1,28 @@
-#from main_script import read_mhunter_csv, calculate_labelling, read_atomic_composition
+#!/usr/env python3
 import SauerFunction as sf
 from SauerClass import Record, Labelling
 import argparse
+import sys
 
-
-
-# Read all the relevant files
-#records = sf.read_mhunter_csv('sample_files/sample_input_data.csv')
-#atomic_composition, N_dict = sf.read_atomic_composition('sample_files/sample_input_formulae.csv')
-#fp = open('sample_files/out_temp.csv', 'w')
+VERSION = '0.1'
+AUTHORS = 'Sean O\'Callaghan, Michael Leeming, Don Teng'
 
 
 parser = argparse.ArgumentParser(description='Do enrichment analysis.')
-parser.add_argument('-1','--input_data', help='Input data file name', required=True)
-parser.add_argument('-2','--input_formulae', help='Input formulae file name', required=True)
-parser.add_argument('-o','--output_filename', help='Name of output file', required=True)
-args = vars(parser.parse_args())
+parser.add_argument('-1','--input_data', help='Input data file name')
+parser.add_argument('-2','--input_formulae', help='Input formulae file name')
+parser.add_argument('-o','--output_filename', help='Name of output file')
+parser.add_argument('--version', help='Print version and exit', action='store_true')
 
-records = sf.read_mhunter_csv(args["input_data"])
-atomic_composition, N_dict = sf.read_atomic_composition(args["input_formulae"])
-fp = open(args["output_filename"], 'w')
+args = parser.parse_args()
+
+if args.version:
+    print('proc.py %s' % VERSION, file=sys.stderr)
+    exit(0)
+
+records = sf.read_mhunter_csv(args.input_data)
+atomic_composition, N_dict = sf.read_atomic_composition(args.input_formulae)
+fp = open(args.output_filename, 'w')
 
 
 labelling_list = []
